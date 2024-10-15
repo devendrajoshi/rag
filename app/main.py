@@ -14,9 +14,7 @@ from fastapi.middleware.gzip import GZipMiddleware
 import io
 import os
 from dotenv import load_dotenv
-import ssl
 
-os.environ["CURL_CA_BUNDLE"] = "" # Disable SSL verification
 
 # Load environment variables
 INDEX_PATH = os.getenv('INDEX_PATH', './index/')
@@ -37,21 +35,6 @@ class RequestModel(BaseModel):
     prompt: str
     session_context: Optional[str] = Field(None)
 
-def check_and_download_model():
-    # Check if the model is available
-    response = requests.get(f"{ollama_base_url}/models")
-    if response.status_code == 200:
-        models = response.json()
-        if LLM_MODEL in models:
-            print(f"Model {LLM_MODEL} is already available.")
-            return
-    # Download the model
-    print(f"Downloading model {LLM_MODEL}...")
-    response = requests.post(f"{ollama_base_url}/api/pull", json={"name": LLM_MODEL})
-    if response.status_code == 200:
-        print(f"Model {LLM_MODEL} downloaded successfully.")
-    else:
-        print(f"Failed to download model {LLM_MODEL}. Status code: {response.status_code}")
     
 
 app = FastAPI(
@@ -62,8 +45,6 @@ app = FastAPI(
 
 app.add_middleware(GZipMiddleware, minimum_size=1000, compresslevel=1)
 
-
-check_and_download_model()
 
 vector_db = None
 is_index_creation_running = False
