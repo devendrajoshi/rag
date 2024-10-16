@@ -5,7 +5,6 @@ from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from langchain_huggingface import HuggingFaceEmbeddings
 from dotenv import load_dotenv
-import boto3
 from datetime import datetime
 import requests
 
@@ -40,16 +39,7 @@ def create_index():
     #empty the vector_db before adding new documents
     vector_db.reset_collection()
     doc_cnt = 0
-    #if the LOCAL_DOCS_PATH is local file path
-    if os.path.exists(LOCAL_DOCS_PATH) and os.listdir(LOCAL_DOCS_PATH):
-        doc_cnt = read_local_files(vector_db)
-    
-    elif LOCAL_DOCS_PATH.startswith('s3://'):
-        doc_cnt = read_s3_files(vector_db)
-
-    else:
-        print("Invalid LOCAL_DOCS_PATH or empty directory: ", LOCAL_DOCS_PATH)
-
+    doc_cnt = read_local_files(vector_db)
     print(f"Indexed {doc_cnt} documents in {datetime.now() - current_time}")
 
 def process_pdf(file, source, doc_cnt):
@@ -82,30 +72,4 @@ def read_local_files(vector_db):
                 docs = process_pdf(file, filename, doc_cnt)
                 doc_cnt += len(docs)
                 vector_db.add_documents(documents=docs)
-    return doc_cnt
-
-def read_s3_files(vector_db):
-    doc_cnt = 0
-    s3 = boto3.client('s3')
-    # Extract bucket name and s3_docs_path from LOCAL_DOCS_PATH
-    path_parts = LOCAL_DOCS_PATH.replace("s3://", "").split("/", 1)
-    bucket_name = path_parts[0]
-    s3_docs_path = path_parts[1] if len(path_parts) > 1 else ""
-    
-    # List all objects in the specified S3 path
-    response = s3.list_objects_v2(Bucket=bucket_name, Prefix=s3_docs_path)
-    
-    for obj in response.get('Contents', []):
-        key = obj['Key']
-        if key.endswith('.pdf'):
-            print(f"Reading {key}")
-            
-            # Download the file from S3
-            s3.download_file(bucket_name, key, '/tmp/temp.pdf')
-            
-            with open('/tmp/temp.pdf', 'rb') as file:
-                docs = process_pdf(file, key, doc_cnt)
-                doc_cnt += len(docs)
-                vector_db.add_documents(documents=docs)
-    
     return doc_cnt

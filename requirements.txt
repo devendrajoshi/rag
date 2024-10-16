@@ -1,4 +1,4 @@
-requests==2.27.1   
+requests  
 langchain-core
 python-dotenv
 fastapi
@@ -8,4 +8,3 @@ langchain-chroma
 langchain_ollama
 PyPDF2
 langchain-huggingface
-boto3
