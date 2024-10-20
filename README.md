@@ -2,7 +2,7 @@
 
 This repository contains a **learning-focused implementation** of **Retrieval-Augmented Generation (RAG)** for **Language Model (LLM)**. The primary goal of this project is to provide an educational resource for understanding and experimenting with RAG and LLM in question-answering tasks. While the implementation is dockerized for ease of use and deployment, it is intended for learning purposes only. **The author assumes no liability for any use of this code beyond educational purposes.**
 
-For users who prefer to use a managed LLM service, consider exploring [this article] (https://www.linkedin.com/posts/joshidevendra_rag-aws-bedrock-activity-7252193205473943552-KvwS?utm_source=share&utm_medium=member_desktop) on using AWS Bedrock for RAG and LLM, which offers a streamlined approach to deploying RAG and LLM solutions.
+For users who prefer to use a managed LLM service, consider exploring [this article](https://www.linkedin.com/posts/joshidevendra_rag-aws-bedrock-activity-7252193205473943552-KvwS?utm_source=share&utm_medium=member_desktop) on using AWS Bedrock for RAG and LLM, which offers a streamlined approach to deploying RAG and LLM solutions.
 
 
 ## Components
