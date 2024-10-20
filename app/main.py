@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 from langchain_ollama.llms import OllamaLLM
 from sentence_transformers import SentenceTransformer
 from langchain_chroma import Chroma
-from .create_index import create_index, get_vector_db, LOCAL_DOCS_PATH, SPLITTER_CHUNK_SIZE, SPLITTER_CHUNK_OVERLAP
+from create_index import create_index, get_vector_db, LOCAL_DOCS_PATH, SPLITTER_CHUNK_SIZE, SPLITTER_CHUNK_OVERLAP
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.prompts import PromptTemplate

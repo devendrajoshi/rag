@@ -2,6 +2,9 @@
 
 This repository contains a **learning-focused implementation** of **Retrieval-Augmented Generation (RAG)** for **Language Model (LLM)**. The primary goal of this project is to provide an educational resource for understanding and experimenting with RAG and LLM in question-answering tasks. While the implementation is dockerized for ease of use and deployment, it is intended for learning purposes only. **The author assumes no liability for any use of this code beyond educational purposes.**
 
+For users who prefer to use a managed LLM service, consider exploring [this article] (https://www.linkedin.com/posts/joshidevendra_rag-aws-bedrock-activity-7252193205473943552-KvwS?utm_source=share&utm_medium=member_desktop) on using AWS Bedrock for RAG and LLM, which offers a streamlined approach to deploying RAG and LLM solutions.
+
+
 ## Components
 
 The project consists of two main components:
@@ -10,18 +13,16 @@ The project consists of two main components:
 
     ```yaml
     ollama:
-      build:
-        context: .
-        dockerfile: Dockerfile.ollama
-      container_name: ollama-container
+      image: ollama/ollama:latest 
       ports:
         - "11434:11434"
       volumes:
         - ${HOST_OLLAMA_HOME}:/root/.ollama
       restart: always
     ```
-
-    - This container builds from the `Dockerfile.ollama`, which extends the official `ollama/ollama` image to handle some certificate issues. In normal scenarios, you can use the official image directly.
+    
+    - This uses the official ollama image.
+    - There is an option for extending official image if need be using the `Dockerfile.ollama`. In normal scenarios, you can use the official image directly.
     - It maps port 11434 on the host to port 11434 in the container.
     - It mounts a volume from the host to the container to persist data. `${HOST_OLLAMA_HOME}` is where the LLM files will be dowloaded.
 
@@ -193,4 +194,15 @@ This section describes the functions involved in creating the document index:
 
 
 By understanding these functions and the `SPLITTER_CHUNK_OVERLAP` variable, you can gain a deeper understanding of the document indexing process in this API.
+
+### RAG Prompt Engineering
+Below is the prompt I have used in this tutorial:
+
+***You are an assistant for question-answering tasks. Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know. Use five sentences maximum and keep the answer concise.
+Question: {question} 
+Context: {context} 
+Answer:***
+
+For a more detailed explaination of this prompt and general discussion on prompt engineering, please refer to my [detailed post](https://www.linkedin.com/pulse/prompt-engineering-unleashed-advanced-techniques-rag-devendra-joshi-69ztc).
+
 
